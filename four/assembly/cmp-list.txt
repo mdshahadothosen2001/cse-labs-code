@@ -1,0 +1,34 @@
+Instruction         ==>     Description                  
+JO	                ==>     Jump if overflow             
+JNO                 ==> 	Jump if not overflow	
+JS                  ==> 	Jump if sign	         
+JNS                 ==> 	Jump if not sign	
+JE                  ==> 	Jump if equal
+JZ                  ==>     Jump if zero		  
+JNE 	            ==>     Jump if not equal
+JNZ                 ==>     Jump if not zero
+JP                  ==>     Jump if parity
+JPE                 ==>     Jump if parity even
+JNP                 ==>     Jump if no parity
+JPO                 ==>     Jump if parity odd
+JCXZ                ==>     Jump if CX is zero
+JECXZ               ==>     Jump if ECX is zero
+JRCXZ	            ==>     Jump if RCX is zero
+JB                  ==>     Jump if below
+JNAE                ==>     Jump if not above or equal
+JC	                ==>     Jump if carry	unsigned
+JNB                 ==>     Jump if not below
+JAE                 ==>     Jump if above or equal
+JNC	                ==>     Jump if not carry	unsigned
+JBE                 ==>     Jump if below or equal
+JNA	                ==>     Jump if not above	unsigned
+JA                  ==>     Jump if above
+JNBE	            ==>     Jump if not below or equal	unsigned
+JL                  ==>     Jump if less
+JNGE                ==>     Jump if not greater or equal
+JGE                 ==>     Jump if greater or equal
+JNL                 ==>     Jump if not less
+JLE                 ==>     Jump if less or equal
+JNG                 ==>	    Jump if not greater	signed
+JG                  ==>     Jump if greater
+JNLE                ==>     Jump if not less or equal	
