@@ -5,6 +5,7 @@ print macro msg
    mov ah,09
    lea dx,msg
    int 21h
+endm
 .stack 100h
 .data
 a db 'Enter number: $'
