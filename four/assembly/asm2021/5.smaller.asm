@@ -1,5 +1,3 @@
-#dispay smaller number between two inputed number
-
 .model small
 .stack 100h
 .code

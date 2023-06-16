@@ -1,44 +1,49 @@
 .model small
 print macro msg
-   mov ah,09
-   lea dx,msg
+   mov ah, 09h
+   lea dx, msg
    int 21h
 endm
+
 .stack 100h
 .data
-msg1 db 'Enter value of n$'
-msg2 db 'Enter elements of n numbers$'
-n db ?
+msg2 db 'Enter elements of 4 numbers: $' 
+msg3 db 'Average is : $'
+n dd 4
+sum db 0
+avg db 0
+
 .code 
 main proc
-   mov ax,@data
-   mov ds,ax
+   mov ax, @data
+   mov ds, ax
 
-   print msg1
-
-   mov ah,01
-   int 21h
-   mov n,al
-
-   mov cx,n
+   mov cx, n
    
    print msg2
 
-   level:
-   mov ah,01
-   int 21h
-   add bl,al
-   loop level
+   mov bl, 0  
 
+   level:
+   mov ah, 01h
+   int 21h
+   sub al, 48
+   add bl, al
+   loop level
+   
    mov al,bl
+   mov ah,0
    div n
+   mov bl,al
+   
+   print msg3
 
    mov ah,02
-   mov dl,al
+   add bl,48
+   mov dl,bl
    int 21h
-
    exit:
-   mov ah,4ch
+   mov ah, 4Ch
    int 21h
    
    main endp

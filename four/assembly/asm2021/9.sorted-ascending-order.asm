@@ -1,38 +1,53 @@
-DATA SEGMENT
-    ARR DW 5, 2, 8, 1, 9     ; Array of numbers to be sorted
-    LEN EQU ($ - ARR) / 2    ; Length of the array
-DATA ENDS
+.model small
+.stack 100h
+.data
+array db 9, 5, 7, 2, 1   
+length equ ($ - array)  
 
-CODE SEGMENT
-    ASSUME CS:CODE, DS:DATA
+.code 
+main proc
+   mov ax, @data
+   mov ds, ax
 
-START:
-    MOV AX, DATA
-    MOV DS, AX              ; Initialize data segment
-    
-    MOV CX, LEN             ; Set the loop counter
-    
-    OUTER_LOOP:
-        MOV SI, 0           ; Initialize inner loop index
-        MOV BX, CX          ; Set the limit of inner loop
-        
-        INNER_LOOP:
-            MOV AX, [ARR + SI * 2]
-            CMP AX, [ARR + (SI+1) * 2]
-            JG SWAP          ; If current element > next element, swap them
-            
-            INC SI           ; Move to the next element
-            CMP SI, BX       ; If inner loop index reaches the limit, exit loop
-            JL INNER_LOOP
-            
-        LOOP OUTER_LOOP     ; Repeat the process for all elements
-    
-    MOV AX, 4C00H           ; Exit program
-    INT 21H
-    
-SWAP:
-    XCHG [ARR + SI * 2], [ARR + (SI+1) * 2]  ; Swap the elements
-    JMP INNER_LOOP
+   mov cx, length      
+   dec cx              
 
-CODE ENDS
-END START
+   outer_loop:
+   mov bx, 0           
+
+   inner_loop:
+   mov si, bx          
+   inc si              
+
+   mov al, [array+bx]  
+   cmp al, [array+si]  
+
+   jbe skip_swap       
+
+   ; Swap the elements
+   mov dl, [array+si]  
+   mov [array+si], al  
+   mov [array+bx], dl  
+
+   skip_swap:
+   inc bx              
+   cmp bx, cx          
+   jl inner_loop       
+
+   loop outer_loop     
+
+   
+   mov cx, length      
+   mov bx, 0           
+
+   display_loop:
+   mov dl, [array+bx]  
+   add dl, '0'         
+
+   mov ah, 02h         
+   int 21h
+
+   inc bx             
+   loop display_loop   
+
+   exit_program:
