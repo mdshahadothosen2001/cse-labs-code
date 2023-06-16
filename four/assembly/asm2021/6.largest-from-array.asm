@@ -27,7 +27,7 @@ main proc
    mov largest,bl
 
    level:
-   add largest,30h
+   sub largest,48
    ;integer to character
 
    lea dx,msg

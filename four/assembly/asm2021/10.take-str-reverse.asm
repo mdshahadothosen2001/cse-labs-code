@@ -1,53 +1,36 @@
 .model small
 .stack 100h
-.data
-msg db 'Enter a string: $'
-result db 10,13,'Display reversed order: $'
-
-print macro arg
-   push ax
-   push dx
-   lea dx,arg
-
-   mov ah,09
-   int 21h
-   pop dx
-   pop ax
-endm
-.code 
+.code
 main proc
-   mov ax,@data
-   mov ds,ax
+    mov cx,0
+    mov ah,1
+    int 21h
+    
+    scan:
+    cmp al,0dh
+    je newline
+    push ax
+    inc cx
+    int 21h
+    jmp scan
+    
+    newline:
+    mov ah,2
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    jcxz exit
+    
+    display:
+    pop dx
+    int 21h
+    loop display
+    
 
-   print msg
+    exit:
+    mov ah, 4Ch
+    int 21h
+main endp
 
-   mov cx,00
-   mov dx,00
-
-   read:
-   mov ah,01h
-   int 21h
-
-   cmp al,0
-   jz done
-
-   mov dx,ax
-   push dx
-   inc dx
-   jmp read
-
-   done:
-   print result
-
-   write:
-   pop dx
-   mov ah,02h
-   int 21h
-   loop write
-   
-   exit:
-   mov ah,4ch
-   int 21h
-
-   main endp
 end main
