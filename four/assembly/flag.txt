@@ -1,0 +1,432 @@
+1            ################################
+
+
+.model small
+print macro msg
+    mov ah,09
+    lea dx,msg
+    int 21h
+endm
+.stack 100h
+.data
+a db 'Enter single character',10,13,'$'
+b db 10,13,'Display Upper Case: $' 
+c db 10,13,'Display Lower Case: $'
+.code
+main proc
+    mov ax,@data
+    mov ds,ax
+
+    print a
+
+    mov ah,01
+    int 21h
+    mov bl,al
+    
+    cmp bl,97
+    jl level
+    print b 
+
+    sub bl,32
+    mov dl,bl
+    mov ah,02
+    int 21h
+    jmp exit
+    
+    level:
+    print c
+    add bl,32
+    mov dl,bl
+    mov ah,02
+    int 21h
+
+    exit:
+    mov ah,4ch
+    int 21h
+    main endp
+end main
+
+
+
+
+
+2 ##########################
+
+
+.model small
+.stack 100h
+.data
+a db 'Enter single charecter',10,13,'$'
+b db 10,13,'Display: $'
+.code
+main proc
+    mov ax,@data
+    mov ds,ax 
+
+    mov ah,09
+    lea dx,a 
+    int 21h
+
+    mov ah,01
+    int 21h
+    mov bl,al
+
+    cmp bl,'Y'
+    je display 
+    cmp bl,'y'
+    jne exit
+
+    display:
+    mov ah,09
+    lea dx,b
+    int 21h
+
+    mov ah,02
+    mov dl,bl
+    int 21h
+
+    exit:
+    mov ah,04ch
+    int 21h
+    main endp
+end main    
+
+
+
+
+3 #################################
+
+
+.model small
+print macro msg
+   mov ah,09
+   lea dx,msg
+   int 21h
+endm
+
+.stack 100h
+.data
+a db 'Enter number: $'
+od db 10,13,'Number is Even$'
+ev db 10,13,'Number is Odd$'
+n db ?
+m db 2
+
+.code
+main proc
+   mov ax,@data
+   mov ds,ax
+
+   print a
+
+   mov ah,01
+   int 21h
+   sub al,48
+   mov n,al
+
+   mov al, n   
+   mov ah, 0   
+
+   div m        
+
+   cmp ah, 0    
+   jne odd      
+
+   print od    
+   jmp exit
+
+odd:
+   print ev 
+
+exit:
+   mov ah,4ch
+   int 21h
+
+main endp
+end main
+
+
+4 ######################
+
+
+.model small
+.stack 100h
+.data
+msg db 'Enter two decimal number$'
+.code
+main proc
+   mov ax,@data
+   mov ds,ax
+
+   mov ah,09
+   lea dx,msg
+   int 21h
+
+   mov ah,01
+   int 21h
+   mov bl,al
+   sub bl,48
+
+   mov ah,01
+   int 21h
+   mov bh,al
+   sub bh,48
+
+   add bl,bh
+   add bl,48
+
+   mov ah,02
+   mov dl,bl
+   int 21h
+
+   exit:
+   mov ah,4ch
+   int 21h
+   main endp
+end main
+
+
+5 #####################
+
+.model small
+.stack 100h
+.code
+main proc
+   mov ah,01
+   int 21h
+   mov bl,al
+
+   mov ah,01
+   int 21h
+   mov bh,al
+
+   cmp bl,bh
+   jg level
+
+   mov ah,02
+   mov dl,bl
+   int 21h
+   jmp exit
+
+   level:
+   mov ah,02
+   mov dl,bh
+   int 21h
+
+   exit:
+   mov ah,4ch
+   int 21h
+   main endp
+end main
+
+
+6 ########################
+
+
+.model small
+.stack 100h
+.data
+msg db 'display largest element$'
+array db 5,3,9,4,5
+largest db ?
+.code
+main proc
+   mov ax,@data
+   mov ds,ax
+
+   mov ah,09
+   lea dx,msg
+   int 21h
+
+   mov cx,5
+   mov al,[di]
+   mov largest,al
+
+   test:
+   inc di
+   mov bl,[di]
+
+   cmp largest,bl
+   jge level
+
+   mov largest,bl
+
+   level:
+   sub largest,48
+
+
+   mov dl,largest
+   mov ah,02
+   int 21h
+
+   exit:
+   mov ah,4ch
+   int 21h
+   main endp
+end main
+
+
+7 #####################
+
+
+.model small
+print macro msg
+   mov ah, 09h
+   lea dx, msg
+   int 21h
+endm
+
+.stack 100h
+.data
+msg2 db 'Enter elements of 4 numbers: $' 
+msg3 db 'Average is : $'
+n dd 4
+sum db 0
+avg db 0
+
+.code 
+main proc
+   mov ax, @data
+   mov ds, ax
+
+   mov cx, n
+   
+   print msg2
+
+   mov bl, 0  
+
+   level:
+   mov ah, 01h
+   int 21h
+   sub al, 48
+   add bl, al
+   loop level
+   
+   mov al,bl
+   mov ah,0
+   div n
+   mov bl,al
+   
+   print msg3
+
+   mov ah,02
+   add bl,48
+   mov dl,bl
+   int 21h
+   exit:
+   mov ah, 4Ch
+   int 21h
+   
+   main endp
+end main
+
+
+
+8 ###################
+
+
+.model small
+.stack 100h
+.code 
+main proc
+   mov cx,3
+   mov ax,1
+
+   level:
+   mul cx
+   dec cx
+   jnz level
+
+   add ax,48
+   mov dx,ax
+   mov ah,02
+   int 21h
+
+   exit:
+   mov ah,4ch
+   int 21h
+   main endp
+end main
+
+
+9 #######################
+
+
+.model small
+.stack 100h
+.code
+main proc
+    mov cx,0
+    mov ah,1
+    int 21h
+    
+    scan:
+    cmp al,0dh
+    je newline
+    push ax
+    inc cx
+    int 21h
+    jmp scan
+    
+    newline:
+    mov ah,2
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    jcxz exit
+    
+    display:
+    pop dx
+    int 21h
+    loop display
+    
+
+    exit:
+    mov ah, 4Ch
+    int 21h
+main endp
+
+end main
+
+
+
+10 #######################
+
+.model small
+.stack 100h
+.code
+main proc
+    mov cx,0
+    mov ah,1
+    int 21h
+    
+    scan:
+    cmp al,0dh
+    je newline
+    push ax
+    inc cx
+    int 21h
+    jmp scan
+    
+    newline:
+    mov ah,2
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    jcxz exit
+    
+    display:
+    pop dx
+    int 21h
+    loop display
+    
+
+    exit:
+    mov ah, 4Ch
+    int 21h
+main endp
+
+end main
+
