@@ -2,7 +2,7 @@
 .stack 100h
 .data
 a db 'Enter single charecter',10,13,'$'
-b db 10,13,'Display$'
+b db 10,13,'Display: $'
 .code
 main proc
     mov ax,@data
@@ -35,3 +35,7 @@ main proc
     int 21h
     main endp
 end main    
+
+
+
+
