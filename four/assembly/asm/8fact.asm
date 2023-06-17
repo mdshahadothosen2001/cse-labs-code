@@ -1,19 +1,19 @@
-# Display ASCII Code
-
 .model small
 .stack 100h
-.code
+.code 
 main proc
-   mov cx,255
-   mov bx,0
-   
-   level:
-   mov ah,02
-   mov dl,bl
-   int 21h
-   inc bl
+   mov cx,3
+   mov ax,1
 
-   loop level
+   level:
+   mul cx
+   dec cx
+   jnz level
+
+   add ax,48
+   mov dx,ax
+   mov ah,02
+   int 21h
 
    exit:
    mov ah,4ch
