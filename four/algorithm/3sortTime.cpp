@@ -19,26 +19,18 @@ void BubbleSort(int *a, int num){
     }
 
 
-int Partition(int *a, int p, int q){
-    int pov = a[q];
-    int i = p, j=q, temp;
+int partition(int *arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
 
-    do{
-        while(a[j] >=pov && i<j)
-            j--;
-        while(a[i] <=pov && i<j)
+    for (int j = low; j <= high - 1; j++) {
+        if (arr[j] < pivot) {
             i++;
-        if(i<j){
-            temp = a[i];
-            a[i] = a[j], a[j]=temp;
+            swap(arr[i], arr[j]);
         }
-    }while(i<j);
-
-    temp= a[i];
-    a[i]= pov;
-    a[p] = temp;
-
-    return i;
+    }
+    swap(arr[i + 1], arr[high]);
+    return i + 1;
 }
 
 void QuickSort(int *a, int i, int j){
