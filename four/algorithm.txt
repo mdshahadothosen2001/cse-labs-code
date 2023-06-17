@@ -93,76 +93,79 @@ Minimum element: 3
 
 3.Write a program to measure the performance using time function between bubble sort and quick sort.
 
-Program:
 #include <iostream>
-#include <chrono>
-#include <vector>
-#include <random>
-#include <algorithm>
+#include<ctime>
+#include<cstdlib>
 
-void bubbleSort(std::vector<int>& arr) {
-    int n = arr.size();
-    bool swapped;
-    for (int i = 0; i < n - 1; ++i) {
-        swapped = false;
-        for (int j = 0; j < n - i - 1; ++j) {
-            if (arr[j] > arr[j + 1]) {
-                std::swap(arr[j], arr[j + 1]);
-                swapped = true;
+using namespace std;
+const int n = 10000;
+
+void BubbleSort(int *a, int num){
+    int temp;
+    for(int i = 0; i <num; i++){
+        for(int j = 0; j < num; j++){
+            if(a[j] > a[j+1])
+                    int temp = a[j];
+                    a[j] = a[j+1];
+                    a[j+1] = temp;
+
             }
         }
-        if (!swapped)
-            break;
     }
-}
 
-int partition(std::vector<int>& arr, int low, int high) {
-    int pivot = arr[high];
-    int i = (low - 1);
-    for (int j = low; j <= high - 1; ++j) {
-        if (arr[j] < pivot) {
-            ++i;
-            std::swap(arr[i], arr[j]);
+
+int Partition(int *a, int p, int q){
+    int pov = a[q];
+    int i = p, j=q, temp;
+
+    do{
+        while(a[j] >=pov && i<j)
+            j--;
+        while(a[i] <=pov && i<j)
+            i++;
+        if(i<j){
+            temp = a[i];
+            a[i] = a[j], a[j]=temp;
         }
-    }
-    std::swap(arr[i + 1], arr[high]);
-    return (i + 1);
+    }while(i<j);
+
+    temp= a[i];
+    a[i]= pov;
+    a[p] = temp;
+
+    return i;
 }
 
-void quickSort(std::vector<int>& arr, int low, int high) {
-    if (low < high) {
-        int pi = partition(arr, low, high);
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
+void QuickSort(int *a, int i, int j){
+    if(i<j){
+        int m= Partition(a,i,j);
+        QuickSort(a,i,m-1);
+        QuickSort(a,m+1,j);
     }
 }
 
-int main() {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> dist(1, 1000);
-    std::vector<int> arr(10000);
-    std::generate(arr.begin(), arr.end(), [&]() { return dist(gen); });
-    auto startTime = std::chrono::steady_clock::now();
-    bubbleSort(arr);
-    auto endTime = std::chrono::steady_clock::now();
-    std::chrono::duration<double> bubbleSortTime = endTime - startTime;
-    std::cout << "Bubble Sort Time: " << bubbleSortTime.count() << " seconds" << std::endl;
-    std::shuffle(arr.begin(), arr.end(), gen);
-    startTime = std::chrono::steady_clock::now();
-    quickSort(arr, 0, arr.size() - 1);
-    endTime = std::chrono::steady_clock::now();
-    std::chrono::duration<double> quickSortTime = endTime - startTime;
-    std::cout << "Quick Sort Time: " << quickSortTime.count() << " seconds" << std::endl;
+int main()
+{
+    clock_t start, stop;
+    int *array_1= new int[n];
+    for(int i=0;i<n; array_1[i]= rand(),i++);
+
+
+    start=clock();
+    BubbleSort(array_1,n-1);
+    stop=clock();
+
+    cout<< "For " <<n<<" elements"<<endl<<"Bubble Sort:"<<((double)(stop-start))/CLOCKS_PER_SEC;
+
+    start=clock();
+    QuickSort(array_1, 0, n-1);
+    stop=clock();
+
+    cout<<endl<<"Quick Sort:"<<((double)(stop-start))/CLOCKS_PER_SEC<<endl<<"seconds";
 
     return 0;
+
 }
-
-
-
-Output:
-Bubble Sort Time: 0.680696 seconds
-Quick Sort Time: 0.00187894 seconds
 
 
 4.Implement the fractional knapsack problem that will generate an optimal solution for the given set of instance.
