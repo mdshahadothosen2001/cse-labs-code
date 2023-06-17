@@ -1,0 +1,614 @@
+1.Implement binary search procedure using divide and conquer method.
+
+Program:
+#include <iostream>
+using namespace std;
+int binarySearch(int arr[], int item, int low, int high)
+{
+    if (low > high)
+    {
+        return -1;
+    }
+    int mid = low + (high - low) / 2;
+    if (arr[mid] == item)
+    {
+        return mid;
+    }
+    else if (item < arr[mid])
+        return binarySearch(arr, item, low, mid - 1);
+    else
+        return binarySearch(arr, item, mid + 1, high);
+}
+int main()
+{
+    int arr[] = {26, 38, 49, 56, 76, 87, 98, 99};
+    int item;
+    cout<<"Enter item "<<endl;
+    cin>>item;
+    int index = binarySearch(arr, item, 0, 7);
+    if (index == -1)
+        cout << "Element not found!" << endl;
+    else
+        cout << "Element index number is " << index + 1 << endl;
+    return 0;
+}
+
+
+Output:
+Enter item 
+26
+Element index number is 1
+
+
+
+2.Implement divide and conquer method for finding the maximum and minimum number.
+
+Program:
+#include <iostream>
+#include <climits>
+void findMaxMin(int arr[], int low, int high, int& maxVal, int& minVal) {
+    if (low == high) {
+        maxVal = minVal = arr[low];
+        return;
+    }
+    if (high - low == 1) {
+        if (arr[low] < arr[high]) {
+            maxVal = arr[high];
+            minVal = arr[low];
+        } else {
+            maxVal = arr[low];
+            minVal = arr[high];
+        }
+        return;
+    }
+    
+    int mid = (low + high) / 2;
+    int maxVal1, minVal1, maxVal2, minVal2;
+    
+    findMaxMin(arr, low, mid, maxVal1, minVal1);
+    findMaxMin(arr, mid + 1, high, maxVal2, minVal2);
+
+    maxVal = (maxVal1 > maxVal2) ? maxVal1 : maxVal2;
+    minVal = (minVal1 < minVal2) ? minVal1 : minVal2;
+}
+
+int main() {
+    int arr[] = {9, 22, 77, 42, 52, 26, 12, 82, 3,9};
+    int size = sizeof(arr) / sizeof(arr[0]);
+    int maxVal, minVal;
+    
+    findMaxMin(arr, 0, size - 1, maxVal, minVal);
+    
+    std::cout << "Maximum element: " << maxVal << std::endl;
+    std::cout << "Minimum element: " << minVal << std::endl;
+    
+    return 0;
+}
+
+
+Output:
+Maximum element: 82
+Minimum element: 3
+
+
+3.Write a program to measure the performance using time function between bubble sort and quick sort.
+
+Program:
+#include <iostream>
+#include <chrono>
+#include <vector>
+#include <random>
+#include <algorithm>
+
+void bubbleSort(std::vector<int>& arr) {
+    int n = arr.size();
+    bool swapped;
+    for (int i = 0; i < n - 1; ++i) {
+        swapped = false;
+        for (int j = 0; j < n - i - 1; ++j) {
+            if (arr[j] > arr[j + 1]) {
+                std::swap(arr[j], arr[j + 1]);
+                swapped = true;
+            }
+        }
+        if (!swapped)
+            break;
+    }
+}
+
+int partition(std::vector<int>& arr, int low, int high) {
+    int pivot = arr[high];
+    int i = (low - 1);
+    for (int j = low; j <= high - 1; ++j) {
+        if (arr[j] < pivot) {
+            ++i;
+            std::swap(arr[i], arr[j]);
+        }
+    }
+    std::swap(arr[i + 1], arr[high]);
+    return (i + 1);
+}
+
+void quickSort(std::vector<int>& arr, int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+int main() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> dist(1, 1000);
+    std::vector<int> arr(10000);
+    std::generate(arr.begin(), arr.end(), [&]() { return dist(gen); });
+    auto startTime = std::chrono::steady_clock::now();
+    bubbleSort(arr);
+    auto endTime = std::chrono::steady_clock::now();
+    std::chrono::duration<double> bubbleSortTime = endTime - startTime;
+    std::cout << "Bubble Sort Time: " << bubbleSortTime.count() << " seconds" << std::endl;
+    std::shuffle(arr.begin(), arr.end(), gen);
+    startTime = std::chrono::steady_clock::now();
+    quickSort(arr, 0, arr.size() - 1);
+    endTime = std::chrono::steady_clock::now();
+    std::chrono::duration<double> quickSortTime = endTime - startTime;
+    std::cout << "Quick Sort Time: " << quickSortTime.count() << " seconds" << std::endl;
+
+    return 0;
+}
+
+
+
+Output:
+Bubble Sort Time: 0.680696 seconds
+Quick Sort Time: 0.00187894 seconds
+
+
+4.Implement the fractional knapsack problem that will generate an optimal solution for the given set of instance.
+
+Program:
+#include <bits/stdc++.h>
+using namespace std;
+struct Item {
+	int profit, weight;
+	Item(int profit, int weight)
+	{
+		this->profit = profit;
+		this->weight = weight;
+	}
+};
+static bool cmp(struct Item a, struct Item b)
+{
+	double r1 = (double)a.profit / (double)a.weight;
+	double r2 = (double)b.profit / (double)b.weight;
+	return r1 > r2;
+}
+double fractionalKnapsack(int W, struct Item arr[], int N)
+{
+	sort(arr, arr + N, cmp);
+	double finalvalue = 0.0;
+	for (int i = 0; i < N; i++) {
+		if (arr[i].weight <= W) {
+			W -= arr[i].weight;
+			finalvalue += arr[i].profit;
+		}
+		else {
+			finalvalue
+				+= arr[i].profit
+				* ((double)W / (double)arr[i].weight);
+			break;
+		}
+	}
+	return finalvalue;
+}
+int main()
+{
+	int W = 50;
+	Item arr[] = { { 90, 30 }, { 110, 40 }, { 220, 50 } };
+	int N = sizeof(arr) / sizeof(arr[0]);
+	cout <<"fractional Knapsack value is "<< fractionalKnapsack(W, arr, N);
+	return 0;
+}
+
+Output:
+fractional Knapsack value is 112
+
+5.Implement the 0/1 knapsack problem that will generate an optimal solutions for the given set of instance such as no of elements n, cost p, and weight wi 5.
+
+Program:
+#include <iostream>
+#include <vector>
+#include <algorithm>
+struct Item {
+    int weight;
+    int value;
+};
+int knapsack(int capacity, std::vector<Item>& items) {
+    int n = items.size();
+    std::vector<std::vector<int>> dp(n + 1, std::vector<int>(capacity + 1, 0));
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= capacity; ++j) {
+            if (items[i - 1].weight <= j) {
+                dp[i][j] = std::max(items[i - 1].value + dp[i - 1][j - items[i - 1].weight], dp[i - 1][j]);
+            } else {
+                dp[i][j] = dp[i - 1][j];
+            }
+        }
+    }
+
+    return dp[n][capacity];
+}
+
+int main() {
+    int capacity = 10;
+    std::vector<Item> items = {
+       {2, 18},
+        {3, 21},
+        {5, 27},
+        {7, 25},
+        {9, 30}
+    };
+    int optimalValue = knapsack(capacity, items);
+    std::cout << "Optimal solution is " << optimalValue << std::endl;
+   return 0;
+}
+
+
+Output:
+Optimal solution is 66
+
+6.Write a program to find the minimum cost spanning tree using Prim's algorithm.
+
+Program:
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+struct Edge {
+    int src, dest, weight;
+};
+struct Node {
+    int vertex, key;
+};
+struct Comparison {
+    bool operator()(const Node& node1, const Node& node2) {
+        return node1.key > node2.key;
+    }
+};
+void findMST(const std::vector<std::vector<int>>& graph) {
+    int numVertices = graph.size();
+    std::priority_queue<Node, std::vector<Node>, Comparison> pq;
+    std::vector<int> key(numVertices, INT_MAX);
+    std::vector<int> parent(numVertices, -1);
+    std::vector<bool> inMST(numVertices, false);
+    int startVertex = 0;
+    pq.push({ startVertex, 0 });
+    key[startVertex] = 0;
+
+    while (!pq.empty()) {
+        int u = pq.top().vertex;
+        pq.pop();
+
+        inMST[u] = true;
+        for (int v = 0; v < numVertices; ++v) {
+            if (graph[u][v] && !inMST[v] && graph[u][v] < key[v]) {
+                key[v] = graph[u][v];
+                parent[v] = u;
+                pq.push({ v, key[v] });
+            }
+        }
+    }
+    std::cout << "Minimum Cost Spanning Tree Edges:\n";
+    for (int i = 1; i < numVertices; ++i) {
+        std::cout << "Edge: " << parent[i] << " - " << i << "   Cost: " << graph[i][parent[i]] << std::endl;
+    }
+}
+
+int main() {
+    std::vector<std::vector<int>> graph = {
+        {0, 7, 0, 7, 0},
+        {9, 0, 6, 8, 5},
+        {0, 5, 0, 0, 7},
+        {6, 8, 0, 0, 2},
+        {0, 5, 2, 8, 0}
+    };
+
+    findMST(graph);
+
+    return 0;
+}
+
+
+Output:.
+Minimum Cost Spanning Tree Edges:
+Edge: 0 - 1   Cost: 9
+Edge: 4 - 2   Cost: 7
+Edge: 0 - 3   Cost: 6
+Edge: 1 - 4   Cost: 5
+
+
+
+7.Write a program to find the single source shortest path.
+
+Program:
+
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+struct Edge {
+    int dest;
+    int weight;
+};
+
+void findShortestPath(int startVertex, const std::vector<std::vector<Edge>>& graph, std::vector<int>& distances) {
+    int numVertices = graph.size();
+    std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> pq;
+    distances.resize(numVertices, INT_MAX);
+    distances[startVertex] = 0;
+    pq.push(std::make_pair(0, startVertex));
+
+    while (!pq.empty()) {
+        int u = pq.top().second;
+        pq.pop();
+        for (const Edge& edge : graph[u]) {
+            int v = edge.dest;
+            int weight = edge.weight;
+            if (distances[u] != INT_MAX && distances[u] + weight < distances[v]) {
+                distances[v] = distances[u] + weight;
+                pq.push(std::make_pair(distances[v], v));
+            }
+        }
+    }
+}
+
+int main() {
+    int numVertices = 5;
+    int startVertex = 0;
+
+    std::vector<std::vector<Edge>> graph(numVertices);
+    graph[0].push_back({ 1, 8 });
+    graph[0].push_back({ 2, 4 });
+    graph[1].push_back({ 2, 1 });
+    graph[1].push_back({ 3, 9 });
+    graph[2].push_back({ 3, 3 });
+    graph[2].push_back({ 4, 6 });
+    graph[3].push_back({ 4, 3 });
+
+
+    std::vector<int> distances;
+    findShortestPath(startVertex, graph, distances);
+    std::cout << "Shortest Distances from Vertex " << startVertex << ":\n";
+    for (int i = 0; i < numVertices; ++i) {
+        std::cout << "Vertex " << i << ": " << distances[i] << std::endl;
+    }
+    return 0;
+}
+
+
+Output:
+Shortest Distances from Vertex 0:
+Vertex 0: 0
+Vertex 1: 8
+Vertex 2: 4
+Vertex 3: 7
+Vertex 4: 10
+
+
+
+8.Write a program to implement dynamic programming method for all pair's shortest path problem.
+
+Program:
+#include <iostream>
+#include <vector>
+#include <climits>
+
+void floydWarshall(std::vector<std::vector<int>>& graph) {
+    int numVertices = graph.size();
+    std::vector<std::vector<int>> distances(numVertices, std::vector<int>(numVertices));
+    for (int i = 0; i < numVertices; ++i) {
+        for (int j = 0; j < numVertices; ++j) {
+            distances[i][j] = graph[i][j];
+        }
+    }
+
+    for (int k = 0; k < numVertices; ++k) {
+        for (int i = 0; i < numVertices; ++i) {
+            for (int j = 0; j < numVertices; ++j) {
+                if (distances[i][k] != INT_MAX && distances[k][j] != INT_MAX &&
+                    distances[i][k] + distances[k][j] < distances[i][j]) {
+                    distances[i][j] = distances[i][k] + distances[k][j];
+                }
+            }
+        }
+    }
+    std::cout << "Shortest Distances between All Pairs:\n";
+    for (int i = 0; i < numVertices; ++i) {
+        for (int j = 0; j < numVertices; ++j) {
+            if (distances[i][j] == INT_MAX) {
+                std::cout << "INF\t";
+            } else {
+                std::cout << distances[i][j] << "\t";
+            }
+        }
+        std::cout << std::endl;
+    }
+}
+
+int main() {
+    int numVertices = 4;
+    std::vector<std::vector<int>> graph = {
+        {0, 3, INT_MAX, 6},
+        {5, 0, 2, INT_MAX},
+        {5, INT_MAX, 0, 2},
+        {9, INT_MAX, INT_MAX, 0}
+    };
+    floydWarshall(graph);
+    return 0;
+}
+
+
+
+
+
+Output:
+Shortest Distances between All Pairs:
+0       3       5       6
+5       0       2       4
+5       8       0       2
+9       12      14      0
+
+
+9.Using backtracking algorithm implement N-queens problem.
+
+Program:
+#include <bits/stdc++.h>
+#define N 4
+using namespace std;
+
+void printSolution(int board[N][N])
+{
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++)
+		if(board[i][j])
+			cout << " Q ";
+		else cout<<" 0 ";
+		printf("\n");
+	}
+}
+bool isSafe(int board[N][N], int row, int col)
+{
+	int i, j;
+	for (i = 0; i < col; i++)
+		if (board[row][i])
+			return false;
+	for (i = row, j = col; i >= 0 && j >= 0; i--, j--)
+		if (board[i][j])
+			return false;
+	for (i = row, j = col; j >= 0 && i < N; i++, j--)
+		if (board[i][j])
+			return false;
+
+	return true;
+}
+bool solveNQUtil(int board[N][N], int col)
+{
+	if (col >= N)
+		return true;
+	for (int i = 0; i < N; i++) {
+		if (isSafe(board, i, col)) {
+			board[i][col] = 1;
+			if (solveNQUtil(board, col + 1))
+				return true;
+			board[i][col] = 0;
+		}
+	}
+
+	return false;
+}
+bool solveNQ()
+{
+	int board[N][N] = { { 0, 0, 0, 0 },
+						{ 0, 0, 0, 0 },
+						{ 0, 0, 0, 0 },
+						{ 0, 0, 0, 0 } };
+
+	if (solveNQUtil(board, 0) == false) {
+		cout << "Solution does not exist";
+		return false;
+	}
+
+	printSolution(board);
+	return true;
+}
+int main()
+{
+	solveNQ();
+	return 0;
+}
+
+
+
+
+
+
+Output:
+ 0  0  Q  0 
+ Q  0  0  0 
+ 0  0  0  Q 
+ 0  Q  0  0
+
+
+10.Write a program for coloring a graph.
+
+Program:
+#include <iostream>
+#include <vector>
+
+bool isSafe(const std::vector<std::vector<int>>& graph, const std::vector<int>& colors, int vertex, int color) {
+    for (int i = 0; i < graph.size(); ++i) {
+        if (graph[vertex][i] && colors[i] == color)
+            return false;
+    }
+    return true;
+}
+
+bool colorGraphUtil(const std::vector<std::vector<int>>& graph, int numColors, std::vector<int>& colors, int vertex) {
+    int numVertices = graph.size();
+    if (vertex == numVertices)
+        return true;
+
+    for (int color = 1; color <= numColors; ++color) {
+        if (isSafe(graph, colors, vertex, color)) {
+            colors[vertex] = color;
+            if (colorGraphUtil(graph, numColors, colors, vertex + 1))
+                return true;
+            colors[vertex] = 0; 
+        }
+    }
+    return false;}
+bool colorGraph(const std::vector<std::vector<int>>& graph, int numColors, std::vector<int>& colors) {
+    if (graph.empty())
+        return false;
+
+    int numVertices = graph.size();
+    colors.resize(numVertices, 0);
+
+    if (colorGraphUtil(graph, numColors, colors, 0))
+        return true;
+
+    return false;
+}
+
+int main() {
+    std::vector<std::vector<int>> graph = {
+        {0, 1, 1, 1},
+        {1, 0, 1, 0},
+        {1, 1, 0, 1},
+        {1, 0, 1, 0}
+    };
+
+    int numColors = 3;
+    std::vector<int> colors;
+
+    if (colorGraph(graph, numColors, colors)) {
+        std::cout << "Graph can be colored using " << numColors << " colors.\n";
+        std::cout << "Color assignment for each vertex:\n";
+        for (int i = 0; i < colors.size(); ++i) {
+            std::cout << "Vertex " << i << ": Color " << colors[i] << std::endl;
+        }
+    } else {
+        std::cout << "Graph cannot be colored using " << numColors << " colors.\n";
+    }
+    return 0;}
+
+
+Output:
+Graph can be colored using 3 colors.
+Color assignment for each vertex:
+Vertex 0: Color 1
+Vertex 1: Color 2
+Vertex 2: Color 3
+Vertex 3: Color 2
+
