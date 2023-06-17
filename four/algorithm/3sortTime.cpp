@@ -19,7 +19,7 @@ void BubbleSort(int *a, int num){
     }
 
 
-int partition(int *arr, int low, int high) {
+int Partition(int *arr, int low, int high) {
     int pivot = arr[high];
     int i = low - 1;
 
