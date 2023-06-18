@@ -1,0 +1,565 @@
+[1]###############################
+
+
+
+
+
+
+
+
+
+
+Schema:
+
+Data-Definition Language (DDL)
+
+CREATE DATABASE IF NOT EXISTS bank;
+USE bank;
+
+
+CREATE TABLE branch (
+  branch_name VARCHAR(100),
+  branch_city VARCHAR(100),
+  assets DECIMAL(10,2),
+  PRIMARY KEY (branch_name)
+);
+
+CREATE TABLE customer (
+  customer_name VARCHAR(100),
+  customer_street VARCHAR(255),
+  customer_city VARCHAR(255),
+  PRIMARY KEY (customer_name)
+);
+
+CREATE TABLE loan (
+  loan_number VARCHAR(100),
+  branch_name VARCHAR(100),
+  amount DECIMAL(10,2),
+  PRIMARY KEY (loan_number),
+  FOREIGN KEY (branch_name) REFERENCES branch (branch_name)
+);
+
+CREATE TABLE borrower (
+  customer_name VARCHAR(100),
+  loan_number VARCHAR(100),
+  PRIMARY KEY (customer_name, loan_number),
+  FOREIGN KEY (customer_name) REFERENCES customer (customer_name),
+  FOREIGN KEY (loan_number) REFERENCES loan (loan_number)
+);
+
+CREATE TABLE account (
+  account_number VARCHAR(100),
+  branch_name VARCHAR(100),
+  balance DECIMAL(10,2),
+  PRIMARY KEY (account_number),
+  FOREIGN KEY (branch_name) REFERENCES branch (branch_name)
+);
+
+CREATE TABLE depositor (
+  customer_name VARCHAR(100),
+  account_number VARCHAR(100),
+  PRIMARY KEY (customer_name, account_number),
+  FOREIGN KEY (customer_name) REFERENCES customer (customer_name),
+  FOREIGN KEY (account_number) REFERENCES account (account_number)
+);
+
+
+Data-Manipulation Language (DML):
+
+INSERT INTO branch (branch_name, branch_city, assets)
+VALUES ('Main Branch', 'New York', 1000000.00),
+       ('Downtown Branch', 'Los Angeles', 750000.00),
+       ('North Branch', 'Chicago', 500000.00),
+       ('East Branch', 'Boston', 300000.00),
+       ('West Branch', 'San Francisco', 400000.00);
+
+INSERT INTO branch (branch_name, branch_city, assets)
+VALUES ('Perryridge', 'Stamford', 800000.00);
+
+INSERT INTO branch (branch_name, branch_city, assets)
+VALUES ('Perryridge', 'Stamford', 650000.00);
+
+INSERT INTO branch (branch_name, branch_city, assets)
+VALUES ('Perryridge', 'Stamford', 400000.00);
+
+INSERT INTO customer (customer_name, customer_street, customer_city)
+VALUES ('John Smith', '123 Main St', 'New York'),
+       ('Jane Doe', '456 Elm St', 'Los Angeles'),
+       ('David Johnson', '789 Oak St', 'Chicago'),
+       ('Emily Williams', '321 Pine St', 'Boston'),
+       ('Michael Brown', '654 Maple St', 'San Francisco');
+
+
+INSERT INTO loan (loan_number, branch_name, amount)
+VALUES ('L001', 'Main Branch', 50000.00),
+       ('L002', 'Downtown Branch', 75000.00),
+       ('L003', 'North Branch', 25000.00),
+       ('L004', 'East Branch', 100000.00),
+       ('L005', 'West Branch', 30000.00);
+
+INSERT INTO borrower (customer_name, loan_number)
+VALUES ('John Smith', 'L001'),
+       ('Jane Doe', 'L002'),
+       ('David Johnson', 'L003'),
+       ('Emily Williams', 'L004'),
+       ('Michael Brown', 'L005');
+
+INSERT INTO account (account_number, branch_name, balance)
+VALUES ('A001', 'Main Branch', 10000.00),
+       ('A002', 'Downtown Branch', 5000.00),
+       ('A003', 'North Branch', 15000.00),
+       ('A004', 'East Branch', 20000.00),
+       ('A005', 'West Branch', 3000.00);
+
+INSERT INTO depositor (customer_name, account_number)
+VALUES ('John Smith', 'A001'),
+       ('Jane Doe', 'A002'),
+       ('David Johnson', 'A003'),
+       ('Emily Williams', 'A004'),
+       ('Michael Brown', 'A005');
+
+
+
+
+
+
+[2]#############################
+
+
+
+Schema:
+
+Data-Definition Language (DDL)
+
+CREATE DATABASE IF NOT EXISTS library;
+USE library;
+
+
+CREATE TABLE employee (
+  emp_no INT PRIMARY KEY,
+  name VARCHAR(50),
+  office VARCHAR(50),
+  age INT
+);
+
+CREATE TABLE books (
+  isbn VARCHAR(20) PRIMARY KEY,
+  title VARCHAR(100),
+  author VARCHAR(50),
+  publisher VARCHAR(50)
+);
+
+CREATE TABLE loan (
+  emp_no INT,
+  isbn VARCHAR(20),
+  date DATE,
+  FOREIGN KEY (emp_no) REFERENCES employee(emp_no),
+  FOREIGN KEY (isbn) REFERENCES books(isbn)
+);
+
+
+Data-Manipulation Language (DML):
+INSERT INTO employee (emp_no, name, office, age)
+VALUES (1, 'John Smith', 'Main Office', 30),
+       (2, 'Jane Doe', 'Branch Office', 25),
+       (3, 'Michael Johnson', 'Main Office', 35),
+       (4, 'Emily Williams', 'Branch Office', 28),
+       (5, 'David Brown', 'Main Office', 32);
+
+INSERT INTO books (isbn, title, author, publisher)
+VALUES ('ISBN001', 'Introduction to Programming', 'John Smith', 'ABC Publications'),
+       ('ISBN002', 'Data Structures and Algorithms', 'Jane Doe', 'XYZ'),
+       ('ISBN003', 'Database Management Systems', 'Michael Johnson', 'DEF Publishers'),
+       ('ISBN004', 'Web Development Basics', 'Emily Williams', 'GHI Books'),
+       ('ISBN005', 'Network Security', 'David Brown', 'JKL Publications');
+
+INSERT INTO loan (emp_no, isbn, date)
+VALUES (1, 'ISBN001', '2023-06-01'),
+       (2, 'ISBN002', '2023-06-02'),
+       (3, 'ISBN003', '2023-06-03'),
+       (4, 'ISBN004', '2023-06-04'),
+       (5, 'ISBN005', '2023-06-05');
+
+INSERT INTO books (isbn, title, author, publisher)
+VALUES ('ISBN006', 'Advanced Data Structures', 'Sarah Johnson', 'XYZ '),
+       ('ISBN007', 'Machine Learning Fundamentals', 'Robert Smith', 'XYZ');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[3]###############################
+
+
+
+
+
+
+
+
+
+
+CREATE DATABASE IF NOT EXISTS bank;
+USE bank;
+
+
+CREATE TABLE branch (
+  branch_name VARCHAR(50),
+  branch_city VARCHAR(50),
+  assets DECIMAL(10, 2),
+  PRIMARY KEY (branch_name)
+);
+
+CREATE TABLE customer (
+  customer_name VARCHAR(50),
+  customer_street VARCHAR(100),
+  customer_city VARCHAR(50),
+  PRIMARY KEY (customer_name)
+);
+
+CREATE TABLE loan (
+  loan_number INT,
+  branch_name VARCHAR(50),
+  amount DECIMAL(10, 2),
+  PRIMARY KEY (loan_number),
+  FOREIGN KEY (branch_name) REFERENCES branch(branch_name)
+);
+
+CREATE TABLE borrower (
+  customer_name VARCHAR(50),
+  loan_number INT,
+  PRIMARY KEY (customer_name, loan_number),
+  FOREIGN KEY (customer_name) REFERENCES customer(customer_name),
+  FOREIGN KEY (loan_number) REFERENCES loan(loan_number)
+);
+
+CREATE TABLE account (
+  account_number INT,
+  branch_name VARCHAR(50),
+  balance DECIMAL(10, 2),
+  PRIMARY KEY (account_number),
+  FOREIGN KEY (branch_name) REFERENCES branch(branch_name)
+);
+
+CREATE TABLE depositor (
+  customer_name VARCHAR(50),
+  account_number INT,
+  PRIMARY KEY (customer_name, account_number),
+  FOREIGN KEY (customer_name) REFERENCES customer(customer_name),
+  FOREIGN KEY (account_number) REFERENCES account(account_number)
+);
+
+
+
+
+Data-Manipulation Language (DML):
+
+INSERT INTO branch (branch_name, branch_city, assets)
+VALUES ('Perryridge', 'City A', 100000),
+       ('Brighton', 'City B', 150000),
+       ('Weston', 'City C', 200000);
+
+INSERT INTO customer (customer_name, customer_street, customer_city)
+VALUES ('John Smith', '123 Main St', 'City A'),
+       ('Alice Johnson', '456 Oak St', 'City B'),
+       ('Robert Brown', '789 Elm St', 'City C'),
+       ('Karim', '987 Maple St', 'City D');
+
+INSERT INTO loan (loan_number, branch_name, amount)
+VALUES (1, 'Perryridge', 5000),
+       (2, 'Perryridge', 10000),
+       (3, 'Brighton', 7500),
+       (4, 'Weston', 12000);
+
+INSERT INTO borrower (customer_name, loan_number)
+VALUES ('John Smith', 1),
+       ('Alice Johnson', 2),
+       ('Robert Brown', 3),
+       ('Karim', 4);
+
+INSERT INTO account (account_number, branch_name, balance)
+VALUES (1001, 'Perryridge', 5000),
+       (1002, 'Perryridge', 10000),
+       (1003, 'Brighton', 7500),
+       (1004, 'Weston', 12000);
+
+INSERT INTO depositor (customer_name, account_number)
+VALUES ('John Smith', 1001),
+       ('Alice Johnson', 1002),
+       ('Robert Brown', 1003),
+       ('Karim', 1004);
+
+
+
+
+
+
+
+[4]##################################
+
+
+
+
+
+
+
+
+
+
+
+
+Schema:
+
+Data-Definition Language (DDL)
+
+CREATE DATABASE IF NOT EXISTS company;
+USE company;
+
+CREATE TABLE employee (
+  employee_name VARCHAR(50),
+  street VARCHAR(50),
+  city VARCHAR(50),
+  PRIMARY KEY (employee_name)
+);
+
+CREATE TABLE company (
+  company_name VARCHAR(50),
+  city VARCHAR(50),
+  PRIMARY KEY (company_name)
+);
+
+CREATE TABLE works (
+  employee_name VARCHAR(50),
+  company_name VARCHAR(50),
+  salary DECIMAL(10, 2),
+  PRIMARY KEY (employee_name, company_name),
+  FOREIGN KEY (employee_name) REFERENCES employee (employee_name),
+  FOREIGN KEY (company_name) REFERENCES company (company_name)
+);
+
+CREATE TABLE manages (
+  employee_name VARCHAR(50),
+  manager_name VARCHAR(50),
+  PRIMARY KEY (employee_name),
+  FOREIGN KEY (employee_name) REFERENCES employee (employee_name),
+  FOREIGN KEY (manager_name) REFERENCES employee (employee_name)
+);
+
+
+Data-Manipulation Language (DML):
+
+INSERT INTO employee (employee_name, street, city)
+VALUES ('John Smith', '123 Main St', 'New York'),
+       ('Jane Doe', '456 Elm St', 'Los Angeles'),
+       ('David Johnson', '789 Oak St', 'Chicago'),
+       ('Emily Williams', '321 Pine St', 'Boston'),
+       ('Michael Brown', '654 Maple St', 'San Francisco');
+
+INSERT INTO company (company_name, city)
+VALUES ('ABC Inc.', 'New York'),
+       ('XYZ Corp.', 'Los Angeles'),
+       ('DEF Ltd.', 'Chicago'),
+       ('GHI Co.', 'Boston'),
+       ('JKL Industries', 'San Francisco');
+
+INSERT INTO works (employee_name, company_name, salary)
+VALUES ('John Smith', 'ABC Inc.', 50000.00),
+       ('Jane Doe', 'XYZ Corp.', 60000.00),
+       ('David Johnson', 'DEF Ltd.', 45000.00),
+       ('Emily Williams', 'GHI Co.', 55000.00),
+       ('Michael Brown', 'JKL Industries', 70000.00);
+
+INSERT INTO manages (employee_name, manager_name)
+VALUES ('John Smith', 'David Johnson'),
+       ('Jane Doe', 'Emily Williams'),
+       ('David Johnson', 'Emily Williams'),
+       ('Emily Williams', 'John Smith'),
+       ('Michael Brown', 'David Johnson');
+
+
+
+
+
+
+
+
+
+
+
+
+[5] #######################
+
+
+
+
+
+Schema:
+
+Data-Definition Language (DDL)
+
+CREATE DATABASE IF NOT EXISTS bank;
+USE bank;
+
+CREATE TABLE `branch` (
+  `branch_name` VARCHAR(100) PRIMARY KEY,
+  `branch_city` VARCHAR(100),
+  `assets` DECIMAL(10,2)
+);
+
+CREATE TABLE `customer` (
+  `customer_name` VARCHAR(100) PRIMARY KEY,
+  `customer_street` VARCHAR(100),
+  `customer_city` VARCHAR(100)
+);
+
+CREATE TABLE `loan` (
+  `loan_number` INT PRIMARY KEY,
+  `branch_name` VARCHAR(100),
+  `amount` DECIMAL(10,2),
+  FOREIGN KEY (`branch_name`) REFERENCES `branch` (`branch_name`)
+);
+
+CREATE TABLE `borrower` (
+  `customer_name` VARCHAR(100),
+  `loan_number` INT,
+  PRIMARY KEY (`customer_name`, `loan_number`),
+  FOREIGN KEY (`customer_name`) REFERENCES `customer` (`customer_name`),
+  FOREIGN KEY (`loan_number`) REFERENCES `loan` (`loan_number`)
+);
+
+CREATE TABLE `account` (
+  `account_number` INT PRIMARY KEY,
+  `branch_name` VARCHAR(100),
+  `balance` DECIMAL(10,2),
+  FOREIGN KEY (`branch_name`) REFERENCES `branch` (`branch_name`)
+);
+
+CREATE TABLE `depositor` (
+  `customer_name` VARCHAR(100),
+  `account_number` INT,
+  PRIMARY KEY (`customer_name`, `account_number`),
+  FOREIGN KEY (`customer_name`) REFERENCES `customer` (`customer_name`),
+  FOREIGN KEY (`account_number`) REFERENCES `account` (`account_number`)
+);
+
+
+Data-Manipulation Language (DML):
+
+INSERT INTO `branch` (`branch_name`, `branch_city`, `assets`)
+VALUES ('Main Branch', 'New York', 1000000.00),
+       ('Downtown Branch', 'Chicago', 750000.00),
+       ('West Branch', 'Los Angeles', 500000.00),
+       ('North Branch', 'Seattle', 600000.00),
+       ('East Branch', 'Boston', 800000.00);
+
+INSERT INTO `customer` (`customer_name`, `customer_street`, `customer_city`)
+VALUES ('John Smith', '123 Main St', 'New York'),
+       ('Jane Doe', '456 Elm St', 'Chicago'),
+       ('David Johnson', '789 Oak St', 'Los Angeles'),
+       ('Emily Williams', '321 Pine St', 'Seattle'),
+       ('Michael Brown', '654 Maple St', 'Boston');
+
+INSERT INTO `loan` (`loan_number`, `branch_name`, `amount`)
+VALUES (1001, 'Main Branch', 50000.00),
+       (1002, 'Downtown Branch', 75000.00),
+       (1003, 'West Branch', 60000.00),
+       (1004, 'North Branch', 40000.00),
+       (1005, 'East Branch', 55000.00);
+
+INSERT INTO `borrower` (`customer_name`, `loan_number`)
+VALUES ('John Smith', 1001),
+       ('Jane Doe', 1002),
+       ('David Johnson', 1003),
+       ('Emily Williams', 1004),
+       ('Michael Brown', 1005);
+
+INSERT INTO `account` (`account_number`, `branch_name`, `balance`)
+VALUES (10001, 'Main Branch', 1000.00),
+       (10002, 'Downtown Branch', 2000.00),
+       (10003, 'West Branch', 1500.00),
+       (10004, 'North Branch', 3000.00),
+       (10005, 'East Branch', 2500.00);
+
+INSERT INTO `depositor` (`customer_name`, `account_number`)
+VALUES ('John Smith', 10001),
+       ('Jane Doe', 10002),
+       ('David Johnson', 10003),
+       ('Emily Williams', 10004),
+       ('Michael Brown', 10005);
+
+
+
+
+[6]######################
+
+
+
+
+
+
+
+
+Schema:
+
+Data-Definition Language (DDL)
+
+CREATE DATABASE IF NOT EXISTS emp;
+USE emp;
+
+CREATE TABLE employee (
+  employee_name VARCHAR(100),
+  street VARCHAR(255),
+  city VARCHAR(255),
+  PRIMARY KEY (employee_name)
+);
+
+CREATE TABLE works (
+  employee_name VARCHAR(100),
+  company_name VARCHAR(100),
+  salary DECIMAL(10, 2),
+  PRIMARY KEY (employee_name, company_name),
+  FOREIGN KEY (employee_name) REFERENCES employee(employee_name)
+);
+
+CREATE TABLE company (
+  company_name VARCHAR(100),
+  city VARCHAR(255),
+  PRIMARY KEY (company_name)
+);
+
+CREATE TABLE manages (
+  employee_name VARCHAR(100),
+  manager_name VARCHAR(100),
+  PRIMARY KEY (employee_name),
+  FOREIGN KEY (employee_name) REFERENCES employee(employee_name)
+);
+
+
+
+Data-Manipulation Language (DML):
+
+INSERT INTO employee (employee_name, street, city) VALUES ('John Smith', '123 Main Street', 'New York');
+INSERT INTO employee (employee_name, street, city) VALUES ('Jane Doe', '456 Elm Street', 'Los Angeles');
+INSERT INTO employee (employee_name, street, city) VALUES ('Michael Johnson', '789 Oak Avenue', 'Chicago');
+
+INSERT INTO works (employee_name, company_name, salary) VALUES ('John Smith', 'ABC Corp', 5000.00);
+INSERT INTO works (employee_name, company_name, salary) VALUES ('Jane Doe', 'XYZ Inc', 6000.00);
+INSERT INTO works (employee_name, company_name, salary) VALUES ('Michael Johnson', '123 Industries', 4500.00);
+
+INSERT INTO company (company_name, city) VALUES ('ABC Corp', 'New York');
+INSERT INTO company (company_name, city) VALUES ('XYZ Inc', 'Los Angeles');
+INSERT INTO company (company_name, city) VALUES ('123 Industries', 'Chicago');
+
+INSERT INTO manages (employee_name, manager_name) VALUES ('John Smith', 'Jane Doe');
+INSERT INTO manages (employee_name, manager_name) VALUES ('Jane Doe', 'Michael Johnson');
+INSERT INTO manages (employee_name, manager_name) VALUES ('Michael Johnson', 'John Smith');
+
