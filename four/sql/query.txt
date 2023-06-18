@@ -1,0 +1,221 @@
+[1]{{{
+
+    (i) Find all customers who have both a loan and an account at the bank.
+Query:
+SELECT DISTINCT c.customer_name
+FROM customer c
+INNER JOIN borrower b ON c.customer_name = b.customer_name
+INNER JOIN loan l ON b.loan_number = l.loan_number
+INNER JOIN depositor d ON c.customer_name = d.customer_name
+INNER JOIN account a ON d.account_number = a.account_number;
+
+
+(ii) Find the average account balance at the 'Perryridge' branch.
+Query:
+SELECT AVG(balance) AS average_balance
+FROM account
+WHERE branch_name = 'Perryridge';
+
+
+
+(iii) Insert a record into the account relation with the values of account number as "AC101" at "Dhanmondi" branch and the balance is tk 30000.
+Query:
+INSERT INTO account (account_number, branch_name, balance)
+VALUES ('AC-101', 'Dhanmondi', 30000)
+
+}}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[2]{{{
+
+    (i) Print the names of all employees who have borrowed any book published by "XYZ".
+Query:
+SELECT DISTINCT e.name
+FROM employee e INNER 
+JOIN loan l ON e.emp_no = l.emp_no INNER 
+JOIN books b ON l.isbn = b.isbn
+WHERE b.publisher = 'XYZ';
+
+
+(ii) Print the names of all employees who have borrowed all books published by "XYZ".
+
+Query:
+
+SELECT e.name
+FROM employee e
+WHERE e.emp_no NOT IN (
+  SELECT l.emp_no
+  FROM loan l
+  WHERE l.isbn IN (
+    SELECT b.isbn
+    FROM books b
+    WHERE b.publisher = 'XYZ'
+  )
+  GROUP BY l.emp_no
+  HAVING COUNT(DISTINCT l.isbn) < (
+    SELECT COUNT(DISTINCT b.isbn)
+    FROM books b
+    WHERE b.publisher = 'XYZ'
+  )
+);
+
+
+(iii) For each publisher, print the names of employees who have borrowed more than five books of that publisher.
+
+Query:
+
+SELECT e.name, b.publisher
+FROM books b
+INNER JOIN loan l ON b.isbn = l.isbn
+INNER JOIN employee e ON l.emp_no = e.emp_no
+GROUP BY b.publisher
+HAVING COUNT(DISTINCT b.isbn) > 5;
+
+}}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[3]{{{
+
+i. Find the number of depositor at each branch. 
+Query:
+SELECT branch_name, COUNT(customer_name) AS num_of_depositors
+FROM depositor
+GROUP BY branch_name;
+
+ii. List in alphabetic order all customers who have a loan at the 'Perryridge' branch.
+Query:
+SELECT c.customer_name
+FROM customer c INNER 
+JOIN borrower b ON c.customer_name = b.customer_name INNER 
+JOIN loan l ON b.loan_number = l.loan_number
+WHERE l.branch_name = 'Perryridge'
+ORDER BY c.customer_name ASC;
+
+
+iii. Update the database to change Karim's street to a new one:
+
+Query:
+UPDATE customer
+SET customer_street = 'New Street'
+WHERE customer_name = 'Karim';
+
+}}}
+
+
+
+[4]{{{
+i. Find the total salary of each company.
+Query:
+
+SELECT company.company-name, SUM(works.salary) AS total_salary
+FROM company
+INNER JOIN works ON company.company-name = works.company-name
+GROUP BY company.company-name;
+
+
+ii. Find all employees in the database who do not work for ACI Ltd.
+
+Query:
+SELECT employee-name
+FROM work
+    WHERE company-name = 'ACI Ltd';
+
+
+iii. Insert record into the employee table with proper values.
+Query:
+INSERT INTO employee (employee-name, street, city)
+VALUES ('John Doe', '123 Main St', 'New York');
+
+
+
+}}}
+
+
+
+
+
+
+[5]{{{
+
+
+    (i) Find the loan number of those loans with loan amounts between tk 10000 and tk 20000.
+
+Query:
+
+SELECT loan_number
+FROM loan
+WHERE amount BETWEEN 10000 AND 20000;
+
+
+(ii) Find all customers who have an account but no loan at the bank.
+
+Query:
+SELECT from c.customer_name FROM customer c inner join depositor d ON c.customer_name=d.customer_name
+WHERE c.customer_name not in (
+
+SELECT from c.customer_name FROM customer c inner join borrower b ON c.customer_name=b.customer_name
+WHERE c.customer_name
+);
+
+
+
+(iii) Add a record in the "customer" table using a form.
+
+Query:
+
+INSERT INTO customer (customer_name, customer_street, customer_city)
+VALUES ('John Doe', '123 Main St', 'New York');
+
+}}}
+
+
+
+[6]{{{
+
+
+    (i) Find the number of tuples in the works relation:
+Query:
+
+SELECT COUNT(employee_name) AS numbers_of_tuple
+FROM works;
+
+
+
+(ii) Find all employees in the database who earn more than each employee of Trust Bank.
+Query:
+
+
+SELECT employwe_name FROM works
+WHERE salary > (SELECT salary FROM works WHERE company_name='Trust Bank';
+
+}}}
